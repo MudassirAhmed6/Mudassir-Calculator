@@ -27,16 +27,17 @@ def main():
     if 'students_results' not in st.session_state:
         st.session_state.students_results = []
 
-    # Ask for subject details only once
+    # Ask for subject details
     num_subjects = st.number_input("How many subjects are there?", min_value=1, step=1)
 
     # Get subjects
-    if st.session_state.subjects == [] and num_subjects > 0:
+    if num_subjects > 0:
         for i in range(num_subjects):
             subject_name = st.text_input(f"Enter subject name {i + 1}:", key=f"subject_{i}")
-            if subject_name:
+            if subject_name and subject_name not in st.session_state.subjects:
                 st.session_state.subjects.append(subject_name)
 
+    # Input for number of students
     num_students = st.number_input("Enter the number of students:", min_value=1, step=1)
 
     if st.button("Generate Results"):
@@ -90,4 +91,4 @@ def main():
 # Run the app
 if __name__ == "__main__":
     main()
-            
+        
