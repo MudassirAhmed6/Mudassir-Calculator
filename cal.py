@@ -28,7 +28,7 @@ def generate_result_cards():
 
     for i in range(num_students):
         st.header(f"--- Enter details for Student {i + 1} ---")
-        student_name = st.text_input(f"Enter student's name {i + 1}:")
+        student_name = st.text_input(f"Enter student's name {i + 1}:", key=f'student_name_{i}')
 
         total_marks = 0  # Initialize total marks to 0
         obtained_marks = 0
@@ -37,10 +37,15 @@ def generate_result_cards():
         # Get marks for each subject, ask for total marks only once
         for subject in ['English', 'Conversation', 'Islamiat', 'Urdu', 'Math', 'Science', 'SST']:
             if subject not in total_marks_dict:
-                subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1)
+                subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1, key=f'{subject}_total_{i}')
                 total_marks_dict[subject] = subject_total
 
-            marks_obtained = st.number_input(f"Enter marks obtained in {subject} (out of {total_marks_dict[subject]}):", min_value=0, max_value=total_marks_dict[subject])
+            marks_obtained = st.number_input(
+                f"Enter marks obtained in {subject} (out of {total_marks_dict[subject]}):",
+                min_value=0,
+                max_value=total_marks_dict[subject],
+                key=f'{subject}_obtained_{i}'
+            )
             subjects[subject] = marks_obtained
             obtained_marks += marks_obtained
             total_marks += total_marks_dict[subject]  # Update total possible marks
