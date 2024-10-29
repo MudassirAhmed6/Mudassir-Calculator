@@ -31,7 +31,7 @@ def main():
     num_subjects = st.number_input("How many subjects are there?", min_value=1, step=1)
 
     # Get subjects
-    if st.session_state.subjects == []:
+    if st.session_state.subjects == [] and num_subjects > 0:
         for i in range(num_subjects):
             subject_name = st.text_input(f"Enter subject name {i + 1}:", key=f"subject_{i}")
             if subject_name:
@@ -73,10 +73,10 @@ def main():
         st.session_state.students_results = students_results
 
     # Sort students by percentage to determine rank
-    st.session_state.students_results.sort(key=lambda x: x[2], reverse=True)
-
-    # Display result cards with ranks
     if st.session_state.students_results:
+        st.session_state.students_results.sort(key=lambda x: x[2], reverse=True)
+
+        # Display result cards with ranks
         st.subheader("--------- All Students Result Cards ---------")
         for rank, (name, obtained, percentage, grade) in enumerate(st.session_state.students_results, start=1):
             st.write(f"**Student Name:** {name}")
@@ -91,4 +91,3 @@ def main():
 if __name__ == "__main__":
     main()
         
-    
