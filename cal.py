@@ -1,5 +1,6 @@
 import streamlit as st
 
+# Function to calculate grade based on percentage
 def calculate_grade(percentage):
     if percentage >= 90:
         return 'A+'
@@ -16,55 +17,59 @@ def calculate_grade(percentage):
     else:
         return 'F'
 
-def main():
+# Function to generate result cards for multiple students
+def generate_result_cards():
     st.title("Mudassir Result Builder")
 
-    num_students = st.number_input("Enter the number of students:", min_value=1, value=1, step=1)
+    # Ask for subject details only once
+    num_subjects = st.number_input("How many subjects are there?", min_value=1, step=1)
+    subjects = [st.text_input(f"Enter subject name {i+1}:") for i in range(num_subjects)]
 
-    total_marks_dict = {}
+    num_students = st.number_input("Enter the number of students:", min_value=1, step=1)
+    
     students_results = []
+    total_marks_dict = {}  # Dictionary to store total marks (asked only once)
 
     for i in range(num_students):
         st.subheader(f"--- Enter details for Student {i + 1} ---")
-        student_name = st.text_input(f"Enter student's name {i + 1}:", key=f"name_{i}")
+        student_name = st.text_input(f"Enter student's name {i + 1}:")
 
-        total_marks = 0
+        total_marks = 0  # Initialize total marks to 0
         obtained_marks = 0
-        subjects = {}
 
-        # Input for subjects
-        for subject in ['English', 'Conversation', 'Islamiat', 'Urdu', 'Math', 'Science', 'SST']:
+        # Get marks for each subject, ask for total marks only once
+        for subject in subjects:
             if subject not in total_marks_dict:
-                subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1, value=100, step=1, key=f"total_{subject}")
+                subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1)
                 total_marks_dict[subject] = subject_total
 
-            marks_obtained = st.number_input(f"Enter marks obtained in {subject} (out of {total_marks_dict[subject]}):", min_value=0, value=0, step=1, key=f"marks_{i}_{subject}")
-            if 0 <= marks_obtained <= total_marks_dict[subject]:
-                subjects[subject] = marks_obtained
-                obtained_marks += marks_obtained
-                total_marks += total_marks_dict[subject]
+            marks_obtained = st.number_input(f"Enter marks obtained in {subject} (out of {total_marks_dict[subject]}):", min_value=0, max_value=total_marks_dict[subject])
+            obtained_marks += marks_obtained
+            total_marks += total_marks_dict[subject]  # Update total possible marks
 
-        # Store results when the user submits data for all students
-        if st.button(f"Calculate Result for {student_name}", key=f"calculate_{i}"):
-            percentage = (obtained_marks / total_marks) * 100 if total_marks > 0 else 0
-            grade = calculate_grade(percentage)
+        # Calculate percentage and grade
+        percentage = (obtained_marks / total_marks) * 100
+        grade = calculate_grade(percentage)
 
-            # Store results for each student
-            students_results.append((student_name, obtained_marks, total_marks, percentage, grade))
+        # Store each student's results in a list
+        students_results.append((student_name, obtained_marks, percentage, grade))
 
-    # Button to show all results
-    if st.button("Show All Results"):
-        if students_results:
-            students_results.sort(key=lambda x: x[3], reverse=True)  # Sort by percentage
-            st.write("### All Students Result Cards:")
-            for rank, (name, obtained, total, percentage, grade) in enumerate(students_results, start=1):
-                st.write(f"**Student Name:** {name}")
-                st.write(f"**Total Marks:** {total}")
-                st.write(f"**Obtained Marks:** {obtained}")
-                st.write(f"**Percentage:** {percentage:.2f}%")
-                st.write(f"**Grade:** {grade}")
-                st.write(f"**Rank:** {rank}")
-                st.write("---")
+    # Sort students by percentage to determine rank
+    students_results.sort(key=lambda x: x[2], reverse=True)
 
+    # Display result cards with ranks
+    st.subheader("--------- All Students Result Cards ---------")
+    for rank, (name, obtained, percentage, grade) in enumerate(students_results, start=1):
+        st.write("\n--------- Result Card ---------")
+        st.write(f"Student Name: {name}")
+        st.write(f"Total Marks: {total_marks}")
+        st.write(f"Obtained Marks: {obtained}")
+        st.write(f"Percentage: {percentage:.2f}%")
+        st.write(f"Grade: {grade}")
+        st.write(f"Rank: {rank}")
+        st.write("--------------------------------")
+
+# Run the app
 if __name__ == "__main__":
-    main()
+    generate_result_cards()
+    
