@@ -67,20 +67,20 @@ def main():
                 grade = calculate_grade(percentage)
 
                 # Store each student's results in a list
-                students_results.append((student_name, obtained_marks, percentage, grade))
+                students_results.append((student_name, obtained_marks, total_marks, percentage, grade))
 
         # Store results in session state
         st.session_state.students_results = students_results
 
     # Sort students by percentage to determine rank
     if st.session_state.students_results:
-        st.session_state.students_results.sort(key=lambda x: x[2], reverse=True)
+        st.session_state.students_results.sort(key=lambda x: x[3], reverse=True)
 
         # Display result cards with ranks
         st.subheader("--------- All Students Result Cards ---------")
-        for rank, (name, obtained, percentage, grade) in enumerate(st.session_state.students_results, start=1):
+        for rank, (name, obtained, total, percentage, grade) in enumerate(st.session_state.students_results, start=1):
             st.write(f"**Student Name:** {name}")
-            st.write(f"**Total Marks:** {total_marks}")
+            st.write(f"**Total Marks:** {total}")  # Now using the total marks correctly
             st.write(f"**Obtained Marks:** {obtained}")
             st.write(f"**Percentage:** {percentage:.2f}%")
             st.write(f"**Grade:** {grade}")
@@ -90,4 +90,4 @@ def main():
 # Run the app
 if __name__ == "__main__":
     main()
-        
+            
