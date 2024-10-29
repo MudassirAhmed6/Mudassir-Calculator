@@ -23,8 +23,8 @@ def main():
     
     num_students = st.number_input("Enter the number of students:", min_value=1, value=1, step=1)
     
-    students_results = []
     total_marks_dict = {}
+    students_results = []
 
     for i in range(num_students):
         st.subheader(f"--- Enter details for Student {i + 1} ---")
@@ -49,15 +49,10 @@ def main():
             percentage = (obtained_marks / total_marks) * 100 if total_marks > 0 else 0
             grade = calculate_grade(percentage)
 
+            # Store results for each student
             students_results.append((student_name, obtained_marks, percentage, grade))
 
-            st.write(f"### Result Card for {student_name}:")
-            st.write(f"Total Marks: {total_marks}")
-            st.write(f"Obtained Marks: {obtained_marks}")
-            st.write(f"Percentage: {percentage:.2f}%")
-            st.write(f"Grade: {grade}")
-
-    # Sort and display result cards with ranks
+    # Display all results after inputting all students
     if st.button("Show All Results"):
         if students_results:
             students_results.sort(key=lambda x: x[2], reverse=True)
@@ -72,4 +67,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
         
