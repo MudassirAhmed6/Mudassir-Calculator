@@ -28,7 +28,7 @@ def main():
 
     for i in range(num_students):
         st.subheader(f"--- Enter details for Student {i + 1} ---")
-        student_name = st.text_input(f"Enter student's name {i + 1}: ")
+        student_name = st.text_input(f"Enter student's name {i + 1}:", key=f"name_{i}")
 
         total_marks = 0
         obtained_marks = 0
@@ -36,16 +36,16 @@ def main():
 
         for subject in ['English', 'Conversation', 'Islamiat', 'Urdu', 'Math', 'Science', 'SST']:
             if subject not in total_marks_dict:
-                subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1, value=100, step=1)
+                subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1, value=100, step=1, key=f"total_{subject}")
                 total_marks_dict[subject] = subject_total
 
-            marks_obtained = st.number_input(f"Enter marks obtained in {subject} (out of {total_marks_dict[subject]}):", min_value=0, value=0, step=1)
+            marks_obtained = st.number_input(f"Enter marks obtained in {subject} (out of {total_marks_dict[subject]}):", min_value=0, value=0, step=1, key=f"marks_{i}_{subject}")
             if 0 <= marks_obtained <= total_marks_dict[subject]:
                 subjects[subject] = marks_obtained
                 obtained_marks += marks_obtained
                 total_marks += total_marks_dict[subject]
 
-        if st.button(f"Calculate Result for {student_name}"):
+        if st.button(f"Calculate Result for {student_name}", key=f"calculate_{i}"):
             percentage = (obtained_marks / total_marks) * 100 if total_marks > 0 else 0
             grade = calculate_grade(percentage)
 
@@ -72,4 +72,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
+        
