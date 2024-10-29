@@ -20,9 +20,9 @@ def calculate_grade(percentage):
 # Main function for Streamlit app
 def main():
     st.title("Mudassir Result Builder")
-    
+
     num_students = st.number_input("Enter the number of students:", min_value=1, value=1, step=1)
-    
+
     total_marks_dict = {}
     students_results = []
 
@@ -34,6 +34,7 @@ def main():
         obtained_marks = 0
         subjects = {}
 
+        # Input for subjects
         for subject in ['English', 'Conversation', 'Islamiat', 'Urdu', 'Math', 'Science', 'SST']:
             if subject not in total_marks_dict:
                 subject_total = st.number_input(f"Enter total marks for {subject}:", min_value=1, value=100, step=1, key=f"total_{subject}")
@@ -45,20 +46,22 @@ def main():
                 obtained_marks += marks_obtained
                 total_marks += total_marks_dict[subject]
 
+        # Store results when the user submits data for all students
         if st.button(f"Calculate Result for {student_name}", key=f"calculate_{i}"):
             percentage = (obtained_marks / total_marks) * 100 if total_marks > 0 else 0
             grade = calculate_grade(percentage)
 
             # Store results for each student
-            students_results.append((student_name, obtained_marks, percentage, grade))
+            students_results.append((student_name, obtained_marks, total_marks, percentage, grade))
 
-    # Display all results after inputting all students
+    # Button to show all results
     if st.button("Show All Results"):
         if students_results:
-            students_results.sort(key=lambda x: x[2], reverse=True)
+            students_results.sort(key=lambda x: x[3], reverse=True)  # Sort by percentage
             st.write("### All Students Result Cards:")
-            for rank, (name, obtained, percentage, grade) in enumerate(students_results, start=1):
+            for rank, (name, obtained, total, percentage, grade) in enumerate(students_results, start=1):
                 st.write(f"**Student Name:** {name}")
+                st.write(f"**Total Marks:** {total}")
                 st.write(f"**Obtained Marks:** {obtained}")
                 st.write(f"**Percentage:** {percentage:.2f}%")
                 st.write(f"**Grade:** {grade}")
@@ -67,5 +70,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
         
